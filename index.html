@@ -1,0 +1,450 @@
+<!doctype html>  
+<html lang="en">
+	
+	<head>
+		<meta charset="utf-8">
+		
+		<title>Melhorando a Acessibilidade de Aplica&ccedil;&atilde;es JavaScript | Leobetosouza</title>
+
+		<meta name="description" content="An easy to use CSS 3D slideshow tool for quickly creating good looking HTML presentations.">
+		<meta name="author" content="Hakim El Hattab">
+		
+		<link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+		
+		<link rel="stylesheet" href="css/reset.css">
+		<link rel="stylesheet" href="css/main.css">
+
+		<link rel="stylesheet" href="lib/zenburn.css">
+	</head>
+	
+	<body>
+		
+		<div id="reveal">
+			
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<section>
+						<h1>Melhorando a Acessibilidade de Aplica&ccedil;&otilde;es JavaScript</h1>
+						<h3 class="inverted"><a href="http://leobetosouza.com/" rel="external">Leonardo Alberto Souza</a> (@<a href="http://twitter.com/leobetosouza" rel="external">leobetosouza</a>)</h3>
+						<p>
+							<small><a href="http://riojs.org/" rel="external">riojs</a>: 2011-12-10 || <a href="http://sampajs.com/" rel="external">sampajs</a>: 2012-03-17</small>
+						</p>
+						<script>
+							// Delicously hacky. Look away.
+							if( navigator.userAgent.match( /(iPhone|iPad|iPod|Android)/i ) )
+							document.write( '<p style="color: rgba(0,0,0,0.3); text-shadow: none;">('+'Tap to navigate'+')</p>' );
+						</script>
+					</section>
+					<section>
+						<h2>Quem é esse cara feio?</h2>
+						<img src="img/leobetosouza.jpg" alt="Leobetosouza - Hope Rise!">
+					</section>
+					<section>
+						<ul>
+							<li>
+								Carioca, quase 25 anos, ex-estudante de Ci&ecirc;ncia da Computa&ccedil;&atilde;o da <abbr title="Universidade Gama Filho">UGF</abbr> e atual estudante de Sistemas de Infoma&ccedil;&atilde;o da <abbr title="Universidade Federal Fluminense">UFF</abbr>;
+							</li>
+							<li>
+								Membro atuante das comunidades <a href="http://riojs.org/">rio.js</a> e <a href="http://dojorio.org/">Dojo Rio</a>;
+							</li>
+							<li>
+								Por 3 anos o cara do front-end do <a href="http://www.mundi.com.br/" rel="nofollow">Mundi</a>;
+							</li>
+							<li>
+								Atualmente Desenvolvedor Front-end na <a href="http://www.parafernalia.net.br/">Parafern&aacute;lia Interativa</a>.
+							</li>
+						</ul>
+
+					</section>
+				</section>
+				
+				<section>
+					<h2>Dicas simples (ou n&atilde;o) de como melhorar a acessibilidade</h2>
+					<p>
+						N&atilde;o vamos entrar no m&eacute;rito de o quanto a acessibilidade é importante. <i>Vamo direto ao ponto!</i>
+					</p>
+					<p>
+						<small>Quer saber a importancia? Vai na <a href="http://www.slideshare.net/horacio.soares/estratgia-design-e-acessibilidade-web-blogcamprj" rel="external">palestra do Horácio</a> que ele é sinistro.</small>
+					</p>
+				</section>
+				
+				<!-- Example of nested vertical slides -->
+				<section>
+					<section>
+						<h2>The first things first</h2>
+						<p>
+							&Eacute; bom prover algum fallback para caso o client esteja com o JS desligado.
+						</p>
+					</section>
+					<section>
+						<h2>Usando a class <code>no-js</code></h2>
+						<pre><code>
+&lt;html class=&quot;no-js&quot;&gt;
+						</code></pre>
+						<p>&Eacute; só retirar ela do <code>html</code> via JavaScript e utilizar a heran&ccedil;a do CSS...</p>
+					</section>
+					<section>
+						<h3>Tchau class!</h3>
+						<p>Existem diversas maneiras (além destas!) de retirar uma class do <code>html</code></p>
+						<pre><code>
+//js puro
+document.documentElement.className.replace(/(^|\s)no-js(\s|$)/, '$1$2');
+
+//jQuery ou Mootools
+$("html").removeClass("no-js");
+
+//Dojo
+dojo.query("html").removeClass("no-js");
+						</code></pre>
+						<p><small>
+							Lembre-se que o <a href="http://www.modernizr.com/" rel="external">Modernizr</a> faz isso automagicamente! :)
+						</small></p>
+					</section>
+					<section>
+						<h3>Estilos alternativos</h3>
+						<p><small>
+							Quando tem JS nossas abas estão todas no mesmo ponto, somente com a ativa visível.<br>
+							Sem JS ficam uma em baixo da outra e visiveis.
+						</small></p>
+						<pre><code>
+#abas{ position:relative; }
+    #abas .aba{
+        position:absolute;
+        top:30px;left:0;
+        display:none;
+        /*...*/
+    }
+    #abas .aba.ativa{
+        display:block;
+    }
+    .no-js #abas .aba{
+        position:static;
+        display:block!important;
+    }
+						</code></pre>
+					</section>
+					<section>
+						<h3>Exemplo:</h3>
+						<p><small>Tabmenu foi um site onde eu fiz o front e meu amigo <a href="http://www.artwebrio.com/" rel="external">Girard</a> foi o designer. Os paineis do topo, o form de login e os sliders ficam bem apresentaveis quando o JS está desligado.</small></p>
+						<a href="http://briefing.elogiabrasil.com.br/padmenu/" class="image"><img src="img/tabmenu.jpg" alt="Site Tabmenu"></a>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>Usando anchors para navegação interna</h2>
+						<p>Você não precisa usar links somente para ligar páginas externas. <strong>Use &acirc;ncoras internas!</strong>
+						<pre><code>
+&lt;section id=&quot;abas&quot;&gt;
+	&lt;nav class=&quot;menu_abas&quot;&gt;
+		&lt;a href=&quot;#aba1&quot;&gt;Aba 1&lt;/a&gt;
+		&lt;a href=&quot;#aba2&quot;&gt;Aba 2&lt;/a&gt;
+		&lt;a href=&quot;#aba3&quot;&gt;Aba 3&lt;/a&gt;
+	&lt;/nav&gt;
+	&lt;section id=&quot;aba1&quot; class=&quot;aba&quot;&gt;
+		&lt;!-- ... --&gt;
+	&lt;/section&gt;
+	&lt;section id=&quot;aba2&quot; class=&quot;aba&quot;&gt;
+		&lt;!-- ... --&gt;
+	&lt;/section&gt;
+	&lt;section id=&quot;aba3&quot; class=&quot;aba&quot;&gt;
+		&lt;!-- ... --&gt;
+	&lt;/section&gt;
+&lt;/section&gt;
+						</code></pre>
+					</section>
+					<section>
+						<p>Dessa maneira você pode reescrever os comportamentos do link via script, e quem não tem suporte &agrave; JS pode navegar tranquilamente pelo seu menu.</p>
+						<pre><code>
+//usando jQuery
+$(&quot;#abas&quot;).on(&quot;click&quot;, &quot;.menu_abas a&quot;, function(event){
+	var $target = $(this.hash); //this.hash &eacute; a parte #etc do href
+	event.preventDefault(); //cancela o comportamento que faria a p&aacute;gina rolar at&eacute; o alvo
+	$(".aba").not($target).hide();
+	$target.show();
+});
+						</code></pre>
+					</section>
+					<section>
+						<h3>O Tabmenu tamb&eacute;m usa isso:</h3>
+						<a href="http://briefing.elogiabrasil.com.br/padmenu/" class="image"><img src="img/tabmenu.jpg" alt="Site Tabmenu"></a>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>Pensando em quem usar dispositivos touch quando usar mouseover</h2>
+						<p>
+							Via touchscreen não tem <code>onmouseover</code> e <code>onmousedown</code>!
+						</p>
+						<img src="img/ipad-2-shotgun.jpg" alt="iPad levando um tiro">
+					</section>
+					<section>
+						<p>
+							Sabe aquele menu dropdown <em>lindo</em> que voc&ecirc; <em>criou</em>?<br>
+							O cara num tablet nunca vai conseguir usar...
+						</p>
+						<img src="img/dropdown.jpg" alt="Menu Dropdown">
+					</section>
+					<section>
+						<h3>Uma gambi que resolve isso:</h3>
+						<pre><code>
+//usando jQuery
+$(".dropdown>a").hover(function(){
+     $(this).click();//no onmouseover a gente dispara o onclick
+},function(){
+     // no onmouseout a gente esconder menu
+}).click(function(){
+     // no onclick a gente mostra o menu normalmente
+});
+
+						</code></pre>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2><code>tabindex</code> &eacute; seu amigo...</h2>
+						<p>E dos seus usu&aacute;rios tamb&eacute;m!</p>
+					</section>
+					<section>
+						<h3>Como <em>funfa</em>?</h3>
+						<p>
+							Os elementos <code>a</code>, <code>area</code>, <code>button</code>, <code>input</code>, <code>object</code>, <code>select</code> e <code>textarea</code> por padrão podem receber foco do cursor.
+						</p>
+						<p>
+							<small>Então, o usuário num screen reader pode sair dando TAB que ele vai navegar por entre esses elementos da sua página... mas e os outros elementos?</small>
+						</p>
+					</section>
+					<section>
+						<h3><code>tabindex=&quot;0&quot;</code> to the rescue!</h3>
+						<p>
+							Usando <code>tabindex=&quot;0&quot;</code> o elemento entra na lista de elementos <em>focaveis</em>... 
+						</p>
+						<pre><code>
+&lt;div id=&quot;interativo&quot; tabindex=&quot;0&quot;&gt;
+	Hello Screen Reader! TAB me :)
+&lt;/div&gt;
+						</code></pre>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>ARIA-Roles</h2>
+						<p>
+							ARIA-Roles servem para que você diga ao client que aquele elemento segue uma regra especial, ou seja: que ele é alguma coisa diferente.
+						</p>
+					</section>
+					<section>
+						<h3>Exemplo:</h3>
+						<p>
+							São aplicadas usando o atributo <code>role</code>.
+						</p>
+						<p>No HTML:</p>
+						<pre><code>
+&lt;div role=&quot;alert&quot;&gt;
+	&amp;nbsp;
+&lt;/div&gt;							
+						</code></pre>
+						<p>No JS:</p>
+						<pre><code>
+var alert = document.createElement(&quot;div&quot;);
+alert.setAttribute(&quot;role&quot;, &quot;alert&quot;);
+						</code></pre>
+					</section>
+					<section>
+						<h3>E você ainda pode usar pra evitar criar um monte de classes no CSS:</h3>
+						<p>Antes:</p>
+						<pre><code>
+.alert{
+	background:#0f0;
+	text-align:center;
+	font-size:2em;
+}
+						</code></pre>
+						Depois:
+						<pre><code>
+[role=alert]]{
+	background:#0f0;
+	text-align:center;
+	font-size:2em;
+}
+						</code></pre>
+					</section>
+					<section>
+						<h3>Existem muitas roles</h3>
+						<p>No W3C tem uma <a href="http://www.w3.org/TR/wai-aria/roles" rel="external">lista enorme de todas elas</a>.</p>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>Landmarks Roles</h2>
+						<p>
+							Indicam ao client que aquele elemento é um <em>ponto navegavel</em> do documento.</p>
+						<p>
+							Screen readers costumam permitir a navegação por elas via teclado.
+						</p>
+					</section>
+					<section>
+						<h4>Exemplo:</h4>
+						<p>
+							<small>Estrutura básica de um site qualquer.</small>
+						</p>
+						<pre><code>
+&lt;body&gt;
+	&lt;header role=&quot;banner&quot&gt;
+		&lt;!-- Cabeçalho da página --&gt;
+	&lt;/header&gt;
+	&lt;div id=&quot;main&quot; role=&quot;main&quot;&gt;
+		&lt;!-- Conteúdo principal do site --&gt;
+	&lt;div&gt;
+	&lt;footer role=&quot;contentinfo&quot;&gt;
+		&lt;!-- Rodap&eacute; do site --&gt;
+	&lt;/footer&gt;
+&lt;/body&gt;
+						</code></pre>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>Widget Roles</h2>
+						<p>Servem para indicar que parte da interface rica onde o usuário pode interagir</p>
+					</section>
+					<section>
+						<h3>Voltando ao nosso exemplo das abas...</h3>
+						<pre><code>
+&lt;section id=&quot;abas&quot; role=&quot;tablist&quot;&gt;
+	&lt;nav class=&quot;menu_abas&quot; role=&quot;tab&quot;&gt;
+		&lt;a href=&quot;#aba1&quot; id=&quot;tabnav1&quot; role=&quot;tab&quot;&gt;Aba 1&lt;/a&gt;
+		&lt;a href=&quot;#aba2&quot; id=&quot;tabnav2&quot; role=&quot;tab&quot;&gt;Aba 2&lt;/a&gt;
+		&lt;a href=&quot;#aba3&quot; id=&quot;tabnav3&quot; role=&quot;tab&quot;&gt;Aba 3&lt;/a&gt;
+	&lt;/nav&gt;
+	&lt;section id=&quot;aba1&quot; role=&quot;tabpanel&quot; aria-labeledby=&quot;tabnav1&quot; class=&quot;aba&quot;&gt;
+		&lt;!-- ... --&gt;
+	&lt;/section&gt;
+	&lt;section id=&quot;aba2&quot; role=&quot;tabpanel&quot; aria-labeledby=&quot;tabnav2&quot; class=&quot;aba&quot;&gt;
+		&lt;!-- ... --&gt;
+	&lt;/section&gt;
+	&lt;section id=&quot;aba3&quot; role=&quot;tabpanel&quot; aria-labeledby=&quot;tabnav1&quot; class=&quot;aba&quot;&gt;
+		&lt;!-- ... --&gt;
+	&lt;/section&gt;
+&lt;/section&gt;
+						</code></pre>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>ARIA Live Regions</h2>
+						<p>
+							Live regions indicam ao client que naquela region alguma coisa vai acontecer.
+						</p>
+						<p>
+							Ou seja: Vai rolar AJAX.
+						</p>
+					</section>
+					<section>
+						<h3>Exemplo do <a href="http://fellipe.com/slides/jqueryfn/">Davidson Fellipe</a>:</h3> 
+						<iframe src="http://fellipe.com/slides/jqueryfn/demo/" width="550" height="500"></iframe>
+					</section>
+					<section>
+						<h3>Legal, funciona... mas o screen reader fica mudo...</h3>
+						<a href="http://fellipe.com/" class="image" rel="external"><img src="img/davidson.jpg" alt="Davidson Fellipe lidando com o screen reader"></a>
+					</section>
+					<section>
+						<h2>Podemos ajudar o screen reader só fazendo isso no HTML:</h2>
+						<pre><code>
+&lt;ol class=&quot;lista-materias&quot; role=&quot;log&quot; aria-alive=&quot;polite&quot; aria-atomic=&quot;true&quot; aria-relevant=&quot;additions&quot; aria-controls=&quot;paginacao&quot;&gt;
+	&lt;!-- ... --&gt;
+	&lt;button id=&quot;paginacao&quot;&gt;Mais&lt;/button&gt;
+&lt;/ol&gt;
+						</code></pre>
+					</section>
+					<section>
+						<h3>Descrição dos ARIA Live</h3>
+						<p><code>aria-live</code>, <code>aria-relevant</code>, <code>aria-atomic</code>, <code>aria-controls</code>, <code>aria-labelledby</code>, <code>aria-describedby</code>.</p>
+						<p>
+							<a href="http://wiki.codetalks.org/wiki/index.php/How_to_use_ARIA_Live_Regions_for_dynamic_content" rel="external"><small>http://wiki.codetalks.org/wiki/index.php/How_to_use_ARIA_Live_Regions_for_dynamic_content</small></a>
+						</p>
+					</section>
+					<section>
+						<h3>Mais notaveis:</h3>
+						<ul>
+							<li><small>aria-live: é usado para dizer ao client com qual prioridade ele vai lidar com as atualizações da região: off (vai fazer nada - default), polite (vai falar só quando o usuário não estiver lendo) ou assertive (vai interonper a leitura do usuário).</small></li>
+							<li><small>aria-atomic: informa ao cliente se ele vai ler o update todo, ou não. true (resumo), false (tudo - default)</small></li>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<h2>Links:</h2>
+					<ul>
+						<li><small><a href="http://www.w3.org/TR/wai-aria/roles">http://www.w3.org/TR/wai-aria/roles</a></small></li>
+						<li><small><a href="http://www.paciellogroup.com/blog/2010/10/jaws-support-for-aria/">http://www.paciellogroup.com/blog/2010/10/jaws-support-for-aria/</a></small></li>
+						<li><small><a href="http://www.accessibleculture.org/articles/2011/04/html5-aria-2011/">http://www.accessibleculture.org/articles/2011/04/html5-aria-2011/</a></small></li>
+						<li><small><a href="http://codetalks.org/wiki/index.php/How_to_use_ARIA_Live_Regions_for_dynamic_content">http://codetalks.org/wiki/index.php/How_to_use_ARIA_Live_Regions_for_dynamic_content</a></small></li>
+						<li><small><a href="http://www.webteacher.ws/2010/10/14/aria-roles-101/">http://www.webteacher.ws/2010/10/14/aria-roles-101/</a></small></li>
+						<li><small><a href="http://www.gonow.com.br/blog/2012/03/12/javascript-nao-obstrutivo-obstrusivo-ou-obtrusivo/">http://www.gonow.com.br/blog/2012/03/12/javascript-nao-obstrutivo-obstrusivo-ou-obtrusivo/</a></small></li>
+						<li><small><a href="http://www.gonow.com.br/blog/2012/03/09/como-usar-o-javascript-para-melhorar-a-acessibilidade-de-paginas-web/">http://www.gonow.com.br/blog/2012/03/09/como-usar-o-javascript-para-melhorar-a-acessibilidade-de-paginas-web/</a></small></li>
+					</ul>
+				</section>
+				<section>
+					<h2>Livro</h2>
+					<a href="http://shop.oreilly.com/product/9780596806149.do" class="image"><img src="img/javascriptcookbook.png" alt="Livro JavaScript Cookbook"></a>
+				</section>
+				<section>
+					<h2>Muito Obrigado!</h2>
+					<h3 class="inverted"><a href="http://leobetosouza.com/" rel="external">Leonardo Alberto Souza</a> (@<a href="http://twitter.com/leobetosouza" rel="external">leobetosouza</a>)</h3>
+					<p>
+						<small>Usei várias ideias dadas pelos mestres <a href="https://twitter.com/#!/horaciosoares">Horácio Soares</a> e <a href="https://twitter.com/#!/cesarcusin">Cesar Cusin</a></small>
+					</p>
+				</section>
+				
+			</div>
+
+			<!-- The navigational controls UI -->
+			<aside class="controls">
+				<a class="left" href="#">&#x25C4;</a>
+				<a class="right" href="#">&#x25BA;</a>
+				<a class="up" href="#">&#x25B2;</a>
+				<a class="down" href="#">&#x25BC;</a>
+			</aside>
+
+			<!-- Displays presentation progress, max value changes via JS to reflect # of slides -->
+			<div class="progress"><span></span></div>
+			
+		</div>
+		
+		<script src="js/reveal.js"></script>
+		<script src="lib/highlight.js"></script>
+		<script>
+			// Parse the query string into a key/value object
+			var query = {};
+			location.search.replace( /[A-Z0-9]+?=(\w*)/gi, function(a) {
+				query[ a.split( '=' ).shift() ] = a.split( '=' ).pop();
+			} );
+
+			Reveal.initialize({
+				// Display controls in the bottom right corner
+				controls: true,
+
+				// Display a presentation progress bar
+				progress: true,
+
+				// If true; each slide will be pushed to the browser history
+				history: true	,
+
+				// Flags if mouse wheel navigation should be enabled
+				mouseWheel: true,
+
+				// Apply a 3D roll to links on hover
+				rollingLinks: true,
+
+				// UI style
+				theme: query.theme || 'neon', // default/neon
+
+				// Transition style
+				transition: query.transition || 'concave' // default/cube/page/concave/linear(2d)
+			});
+
+			hljs.initHighlightingOnLoad();
+		</script>
+
+	</body>
+</html>
